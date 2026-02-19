@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -53,8 +54,9 @@ func getWeather(city string, apiKey string) WeatherResponse {
 }
 
 func main() {
+	apiKey := os.Getenv("OPENWEATHER_API_KEY")
 
-	weatherData := getWeather("Red+Deer", "9b107786106090c329d26b6f1fb4acb0")
+	weatherData := getWeather("Red+Deer", apiKey)
 	lastFetch := time.Now()
 
 	for {
@@ -68,7 +70,7 @@ func main() {
 		fmt.Println(formattedTime)
 
 		if time.Since(lastFetch) > 5*time.Minute {
-			weatherData = getWeather("Red+Deer", "9b107786106090c329d26b6f1fb4acb0")
+			weatherData = getWeather("Red+Deer", apiKey)
 			lastFetch = time.Now()
 		}
 		fmt.Printf("Temp: %.1f°C (feels like %.1f°C)\n", weatherData.Main.Temp, weatherData.Main.FeelsLike)
